@@ -1,11 +1,32 @@
-import { Form, Button, message, DatePicker, Layout, Menu, Input, InputNumber} from 'antd'
+import { Form, Button, message, DatePicker, Layout, Menu, Input, InputNumber, Select} from 'antd'
 import { Link } from 'react-router-dom'
 import InvestimetoService from '../../service/investimentoService'
+import { useState, useEffect} from 'react'
+import categoriaService from '../../service/categoriaService'
 
 const {Header, Content, Footer} = Layout
+const {Option} = Select
 
 export default function CadastrarInvestimento(){
    
+    const [categorias, setCategorias] = useState([])
+    const [categoria, setCategoria] = useState(null)
+
+    useEffect(() => {
+        refreshCategorias()
+        return () => {
+
+        }
+    }, [])
+
+    async function refreshCategorias(){
+        categoriaService.retrieveCategorias().then(
+            response => {
+                setCategorias(response.data)
+            }
+        )
+    }
+
     const layout = {
         labelCol: {
           span: 4,
@@ -29,6 +50,10 @@ export default function CadastrarInvestimento(){
       const onFinishFailed = (erroInfo) => {
         message.danger("Investimento não foi salvo.")
         console.log('Failed', erroInfo)
+    }
+
+    function handleChange(value){
+        setCategoria(value)
     }
 
     return (
@@ -110,7 +135,16 @@ export default function CadastrarInvestimento(){
                             label="Categoria"
                             name="categoria"
                             >
-                                <Input/>
+                                <Select onChange={handleChange} >
+                                    {categorias.map((item, index) => {
+                                        return(
+                                            <Option key={item.id} value={item.id}>
+                                                {item.name}
+                                            </Option>
+                                        )
+                                    })}
+                                    
+                                </Select>
                             </Form.Item>
 
                             <Form.Item {...tailLayout}>

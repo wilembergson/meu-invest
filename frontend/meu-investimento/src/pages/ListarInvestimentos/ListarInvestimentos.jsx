@@ -27,6 +27,7 @@ export default function ListarInvestimentos() {
     }
 
     function remove(record){
+        investimentoService.deleteInvestimento(record.id)
         message.success('Investimento removido com sucesso.')
     }
 
