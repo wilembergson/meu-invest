@@ -1,5 +1,6 @@
 import { Form, Button, message, DatePicker, Layout, Menu, Input, InputNumber} from 'antd'
 import { Link } from 'react-router-dom'
+import InvestimetoService from '../../service/investimentoService'
 
 const {Header, Content, Footer} = Layout
 
@@ -20,7 +21,8 @@ export default function CadastrarInvestimento(){
         },
       };
    
-      const onFinish = (value) => {
+      const onFinish = (values) => {
+          InvestimetoService.saveInvestimento(values)
           message.success("Investimento salvo com sucesso.")
       }
 
@@ -50,7 +52,7 @@ export default function CadastrarInvestimento(){
                         initialValues={{
                             remember: true,
                         }}
-                        oninFish={onFinish}
+                        onFinish={onFinish}
                         >
                             <Form.Item
                             label="Código do ativo"
@@ -67,7 +69,7 @@ export default function CadastrarInvestimento(){
 
                             <Form.Item
                             label="Valor"
-                            name="valor"
+                            name="valorCota"
                             rules={[
                                 {
                                     required: true,
@@ -102,6 +104,13 @@ export default function CadastrarInvestimento(){
                             ]}
                             >
                                 <DatePicker/>
+                            </Form.Item>
+
+                            <Form.Item
+                            label="Categoria"
+                            name="categoria"
+                            >
+                                <Input/>
                             </Form.Item>
 
                             <Form.Item {...tailLayout}>
